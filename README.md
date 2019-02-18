@@ -3,7 +3,7 @@
 ## Bendrai
 Python yra pakankamai sena kalba:
 
-<cite>First appeared	1990; 28 years ago</cite>
+<cite>First appeared	1990</cite>
  
 Wiki - https://en.wikipedia.org/wiki/Python_%28programming_language%29
 
