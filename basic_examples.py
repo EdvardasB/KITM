@@ -91,3 +91,27 @@ if not pavyko:
 
 if not pavyko:
     print("Įvestas ne skaičius.")
+
+
+# List comprehension dirban su prekėmis
+products = [{"preke": "dviratis", "id": 0}]
+products = [{"preke": "dviratis", "id": 0}, {"preke": "ratas", "id": 0}]
+products[0]['preke']
+#'dviratis'
+[d['preke'] for d in products]
+#['dviratis', 'ratas']
+[d['id'] for d in products]
+#[0, 0]
+[{k: v for k, v in d.items() if k in ['preke', 'aprasymas']} for d in products]
+#[{'preke': 'dviratis'}, {'preke': 'ratas'}]
+[{k: v for k, v in d.items() if k in ['preke', 'aprasymas']}.values() for d in products]
+#[dict_values(['dviratis']), dict_values(['ratas'])]
+[list({k: v for k, v in d.items() if k in ['preke', 'aprasymas']}.values()) for d in products]
+#[['dviratis'], ['ratas']]
+products = [{"preke": "dviratis", "id": 0, "aprasymas": "ksafdalsngfans"},
+            {"preke": "ratas", "id": 1}]
+[list({k: v for k, v in d.items() if k in ['preke', 'aprasymas']}.values()) for d in products]
+#[['dviratis', 'ksafdalsngfans'], ['ratas']]
+for prekes_info in products:
+    for informacija, verte in prekes_info.items():
+        print(f"{informacija} yra {verte}")
