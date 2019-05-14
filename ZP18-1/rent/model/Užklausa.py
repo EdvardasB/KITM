@@ -1,0 +1,2 @@
+class Užklausa:
+    pass
