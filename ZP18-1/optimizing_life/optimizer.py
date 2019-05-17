@@ -10,6 +10,24 @@ Gyvenimo optimizavimas
 from typing import List, Dict, Tuple
 
 
+def Builder(C):
+    def wrapper(attr):
+        def builder(self, value):
+            setattr(self, attr, value)
+            return self
+
+        return builder
+
+    annotations = C.__annotations__
+    for attr, attr_type in annotations.items():
+        if attr_type == bool:
+            setattr(C, f"is_{attr}", wrapper(attr))
+        else:
+            setattr(C, f"with_{attr}", wrapper(attr))
+    return C
+
+
+@Builder
 class Veikla:
     pavadinimas: str
     kategorija: str
@@ -19,7 +37,21 @@ class Veikla:
     min_laikas: float
     max_laikas: float
     išlaidos: float
-    fiksuotas_kiekis_per_laiko_tarpą: Tuple[float, str]
+
+    def __repr__(self):
+        return f"Veikla<{self.pavadinimas}>"
+
+    def __init__(self,
+                 pavadinimas,
+                 kategorija,
+                 svarba,
+                 ar_fiksuotas_laikas,
+                 išlaidos=0.0):
+        self.pavadinimas = pavadinimas
+        self.kategorija = kategorija
+        self.svarba = svarba
+        self.ar_fiksuotas_laikas = ar_fiksuotas_laikas
+        self.išlaidos = išlaidos
 
 
 class Asmuo:
@@ -33,6 +65,12 @@ class Asmuo:
 
     def __init__(self, vardas):
         self.vardas = vardas
+        self.svertai = {
+            "Pramogos": 0.25,
+            "Poilsis": 0.25,
+            "Socializacija": 0.25,
+            "Tobulėjimas": 0.25
+        }
 
     @property
     def laisvas_laikas(self):
@@ -70,13 +108,30 @@ class Asmuo:
                         laikas = 0
                 if laikas == 0:
                     break
+        return pasirinktos_veiklos
 
 
-
+v1 = Veikla("Sporto klubas", "Pramogos", 10, False) \
+    .with_min_laikas(1) \
+    .with_max_laikas(3)
+v2 = Veikla("Baseinas", "Pramogos", 20, True) \
+    .with_laikas(1)
+v3 = Veikla("Susitikimas su draugais", "Socializacija", 10, False) \
+    .with_min_laikas(1) \
+    .with_max_laikas(3)
+v4 = Veikla("Skaitymas", "Tobulėjimas", 10, True) \
+    .with_laikas(1)
+v5 = Veikla("Programavimas", "Tobulėjimas", 20, True) \
+    .with_laikas(1)
+v6 = Veikla("TV", "Poilsis", 10, True) \
+    .with_laikas(1)
 
 Tadas = Asmuo("Tadas")
 Tadas.darbas = 9.0
 Tadas.miegas = 6.0
 Tadas.kelionių_laikas = 1.0
+Tadas.veiklos = [v1, v2, v3, v4, v5, v6]
 print(f"Laisvas laikas: {Tadas.laisvas_laikas}")
-Tadas.laisvas_laikas = 10
+print("Grafikas")
+for item in Tadas.grafikas:
+    print(item)
